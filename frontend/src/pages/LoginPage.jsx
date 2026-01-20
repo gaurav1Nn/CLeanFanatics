@@ -67,22 +67,22 @@ const LoginPage = () => {
     const selectedUserData = users.find(u => u._id === selectedUser);
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-6 sm:p-8 border border-gray-200">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="flex justify-center mb-4">
-                        <div className="p-3 bg-blue-50 rounded-full">
-                            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="text-center mb-6 sm:mb-8">
+                    <div className="flex justify-center mb-3 sm:mb-4">
+                        <div className="p-2.5 sm:p-3 bg-blue-50 rounded-full">
+                            <svg className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h1>
                     <p className="text-gray-500 text-sm mt-2">Sign in to CleanFanatics</p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleLogin} className="space-y-5 sm:space-y-6">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             Select Demo User
@@ -94,7 +94,7 @@ const LoginPage = () => {
                                     setSelectedUser(e.target.value);
                                     setError('');
                                 }}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
+                                className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-900 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
                             >
                                 <option value="">Choose a user...</option>
                                 <optgroup label="Customers">
@@ -124,12 +124,12 @@ const LoginPage = () => {
                     </div>
 
                     {selectedUserData && (
-                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-3 sm:gap-4">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-base sm:text-lg flex-shrink-0">
                                 {selectedUserData.name.charAt(0)}
                             </div>
-                            <div>
-                                <p className="font-medium text-gray-900">{selectedUserData.name}</p>
+                            <div className="flex-grow min-w-0">
+                                <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{selectedUserData.name}</p>
                                 <p className="text-xs text-gray-500 capitalize">{selectedUserData.role}</p>
                             </div>
                         </div>
@@ -144,13 +144,13 @@ const LoginPage = () => {
                     <button
                         type="submit"
                         disabled={loading || !selectedUser}
-                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3.5 sm:py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base"
                     >
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>
 
-                <div className="mt-8 text-center text-xs text-gray-400">
+                <div className="mt-6 sm:mt-8 text-center text-xs text-gray-400">
                     <p>Demo Mode • No password required</p>
                 </div>
             </div>

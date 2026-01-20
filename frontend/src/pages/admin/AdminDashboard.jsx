@@ -140,12 +140,12 @@ const AdminDashboard = () => {
                             <option value="plumbing">Plumbing</option>
                             <option value="electrical">Electrical</option>
                         </select>
-                        <button
+                        {/* <button
                             onClick={() => setFilter({})}
                             className="text-sm text-gray-600 hover:text-gray-900 px-3 py-2"
                         >
                             Clear
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 

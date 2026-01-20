@@ -100,9 +100,9 @@ const EventLogsPage = () => {
                             <option key={action} value={action}>{action.replace(/_/g, ' ')}</option>
                         ))}
                     </select>
-                    <button onClick={() => setFilter({})} className="btn-secondary text-sm py-3 px-5">
+                    {/* <button onClick={() => setFilter({})} className="btn-secondary text-sm py-3 px-5">
                         Clear
-                    </button>
+                    </button> */}
                     <button onClick={fetchLogs} className="btn-primary text-sm inline-flex items-center gap-2 py-3 px-5">
                         <span>🔄</span> Refresh
                     </button>

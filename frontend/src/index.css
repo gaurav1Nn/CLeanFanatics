@@ -300,3 +300,36 @@ tbody tr:hover {
   background: rgba(37, 99, 235, 0.2);
   color: var(--gray-900);
 }
+
+/* Mobile Utilities */
+@media (max-width: 640px) {
+
+  /* Ensure touch targets are at least 44x44px on mobile */
+  button,
+  a.btn,
+  .btn {
+    min-height: 44px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    min-height: 44px;
+    font-size: 16px;
+    /* Prevents zoom on iOS */
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
