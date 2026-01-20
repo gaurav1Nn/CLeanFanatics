@@ -26,8 +26,8 @@ const bookingSchema = new mongoose.Schema({
     },
     serviceType: {
         type: String,
-        enum: ['cleaning', 'plumbing', 'electrical'],
-        required: [true, 'Service type is required']
+        required: [true, 'Service type is required'],
+        trim: true
     },
     status: {
         type: String,

@@ -13,12 +13,6 @@ const createBooking = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'Please provide serviceType, scheduledDate, scheduledTime, and address');
     }
 
-    // Validate service type
-    const validServices = ['cleaning', 'plumbing', 'electrical'];
-    if (!validServices.includes(serviceType)) {
-        throw new ApiError(400, `Invalid service type. Must be one of: ${validServices.join(', ')}`);
-    }
-
     // Create booking
     const booking = await Booking.create({
         customer: customerId,
@@ -68,10 +62,10 @@ const getMyBookings = asyncHandler(async (req, res) => {
         .sort({ createdAt: -1 })
         .lean();
 
-    // Attach provider names from demo users
+    // Attach full provider objects from demo users (including mockDistance)
     const bookingsWithProviders = bookings.map(booking => {
         if (booking.provider && DEMO_USERS[booking.provider]) {
-            booking.providerName = DEMO_USERS[booking.provider].name;
+            booking.provider = DEMO_USERS[booking.provider];
         }
         return booking;
     });

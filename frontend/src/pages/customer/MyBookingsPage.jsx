@@ -52,6 +52,13 @@ const MyBookingsPage = () => {
         });
     };
 
+    const formatServiceName = (serviceType) => {
+        return serviceType
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+
     const filterOptions = [
         { value: 'all', label: 'All' },
         { value: 'pending', label: 'Pending' },
@@ -120,8 +127,8 @@ const MyBookingsPage = () => {
                                     {/* Header with service name and status */}
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="flex-grow min-w-0">
-                                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 capitalize">
-                                                {booking.serviceType} Service
+                                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                                                {formatServiceName(booking.serviceType)}
                                             </h3>
                                             <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-1">
                                                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,9 +157,20 @@ const MyBookingsPage = () => {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                             <span className="text-gray-600 flex-grow">
-                                                <span className="font-medium text-gray-900">
-                                                    {booking.provider ? booking.provider.name : 'Pending Assignment'}
-                                                </span>
+                                                {booking.provider ? (
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="font-medium text-gray-900">
+                                                            {booking.provider.name}
+                                                        </span>
+                                                        {booking.provider.mockDistance && (
+                                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-full">
+                                                                📍 {booking.provider.mockDistance} km away
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="font-medium text-gray-900">Pending Assignment</span>
+                                                )}
                                             </span>
                                         </div>
                                     </div>

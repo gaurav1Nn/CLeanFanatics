@@ -6,7 +6,7 @@ const CreateBookingPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        serviceType: 'cleaning',
+        serviceType: 'sofa-cleaning',
         scheduledDate: '',
         scheduledTime: '',
         address: '',
@@ -15,34 +15,30 @@ const CreateBookingPage = () => {
 
     const services = [
         {
-            id: 'cleaning',
-            name: 'Home Cleaning',
-            icon: (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-            ),
-            desc: 'Regular home cleaning service'
+            category: 'Cleaning',
+            options: [
+                { id: 'sofa-cleaning', name: 'Sofa Cleaning', icon: '🛋️' },
+                { id: 'window-wash', name: 'Window Wash', icon: '🪟' },
+                { id: 'floor-cleaning', name: 'Floor Cleaning', icon: '🧹' },
+                { id: 'deep-cleaning', name: 'Deep Cleaning', icon: '✨' }
+            ]
         },
         {
-            id: 'plumbing',
-            name: 'Plumbing',
-            icon: (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
-            ),
-            desc: 'Pipe repairs and installation'
+            category: 'Plumbing',
+            options: [
+                { id: 'leaking-tap', name: 'Leaking Tap', icon: '🚰' },
+                { id: 'pipe-repair', name: 'Pipe Repair', icon: '🔧' },
+                { id: 'drain-cleaning', name: 'Drain Cleaning', icon: '🚿' },
+                { id: 'bathroom-fitting', name: 'Bathroom Fitting', icon: '🚽' }
+            ]
         },
         {
-            id: 'electrical',
-            name: 'Electrical',
-            icon: (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-            ),
-            desc: 'Wiring and appliance repair'
+            category: 'Electrical',
+            options: [
+                { id: 'wiring-repair', name: 'Wiring Repair', icon: '⚡' },
+                { id: 'appliance-repair', name: 'Appliance Repair', icon: '🔌' },
+                { id: 'switch-installation', name: 'Switch Installation', icon: '💡' }
+            ]
         }
     ];
 
@@ -64,36 +60,30 @@ const CreateBookingPage = () => {
             <div className="max-w-2xl mx-auto">
                 <div className="mb-6 sm:mb-8">
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Book a Service</h1>
-                    <p className="text-gray-500 text-sm mt-1">Fill in the details to schedule your appointment.</p>
+                    <p className="text-gray-500 text-sm mt-1">Select your specific service need.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 bg-white p-5 sm:p-8 rounded-xl border border-gray-200 shadow-lg">
 
-                    {/* Service Type */}
+                    {/* Service Type - Dropdown */}
                     <section>
-                        <label className="block text-sm font-semibold text-gray-900 mb-4">Select Service Type</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                            {services.map((service) => (
-                                <button
-                                    key={service.id}
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, serviceType: service.id })}
-                                    className={`
-                                    relative p-4 sm:p-4 rounded-xl border-2 text-left transition-all min-h-[100px] sm:min-h-0 shadow-sm hover:shadow-md
-                                    ${formData.serviceType === service.id
-                                            ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-md'
-                                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600'
-                                        }
-                                `}
-                                >
-                                    <div className={`mb-3 ${formData.serviceType === service.id ? 'text-blue-600' : 'text-gray-400'}`}>
-                                        {service.icon}
-                                    </div>
-                                    <h3 className="font-semibold text-sm sm:text-base">{service.name}</h3>
-                                    <p className="text-xs mt-1 opacity-75">{service.desc}</p>
-                                </button>
+                        <label className="block text-sm font-semibold text-gray-900 mb-3">Select Service Type</label>
+                        <select
+                            value={formData.serviceType}
+                            onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                            className="w-full px-4 py-3.5 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-900 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                        >
+                            {services.map((category) => (
+                                <optgroup key={category.category} label={category.category}>
+                                    {category.options.map((service) => (
+                                        <option key={service.id} value={service.id}>
+                                            {service.icon} {service.name}
+                                        </option>
+                                    ))}
+                                </optgroup>
                             ))}
-                        </div>
+                        </select>
+                        <p className="text-xs text-gray-500 mt-2">We'll match you with the nearest expert for this service</p>
                     </section>
 
                     <hr className="border-gray-100" />

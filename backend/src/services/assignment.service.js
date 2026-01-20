@@ -3,14 +3,18 @@ const { DEMO_USERS } = require('../controllers/auth.controller');
 
 /**
  * Get available providers from demo users based on service type
+ * Sorted by proximity (mockDistance) in ascending order
  */
 const getAvailableProviders = (serviceType, excludeProviders = []) => {
-    return Object.values(DEMO_USERS).filter(user =>
+    const providers = Object.values(DEMO_USERS).filter(user =>
         user.role === 'provider' &&
         user.isAvailable &&
         user.serviceCategories?.includes(serviceType) &&
         !excludeProviders.includes(user._id)
     );
+
+    // Sort by mockDistance (closest first)
+    return providers.sort((a, b) => (a.mockDistance || 999) - (b.mockDistance || 999));
 };
 
 /**
