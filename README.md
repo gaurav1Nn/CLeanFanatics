@@ -27,36 +27,6 @@ CleanFanatics is a modern, full-stack MERN application designed to streamline th
 - **Database**: MongoDB (Mongoose)
 - **Authentication**: Role-based Auth (Customer/Provider/Admin) - *Demo Mode enabled*
 
-### Project Structure
-
-## 🏁 Getting Started
-CleanFanatics/
-│
-├── backend/
-│   ├── controllers/       # Business logic
-│   ├── models/            # Mongoose schemas
-│   ├── routes/            # API routes
-│   ├── middleware/        # Auth & role checks
-│   ├── utils/             # Helper functions
-│   ├── logs/              # System logs
-│   ├── .env               # Environment variables
-│   ├── server.js          # App entry point
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page-level components
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── services/      # API calls
-│   │   ├── context/       # Global state & auth
-│   │   ├── styles/        # Tailwind & custom styles
-│   │   └── main.jsx
-│   ├── index.html
-│   └── package.json
-│
-├── README.md
-└── LICENSE
 
 ### Prerequisites
 - Node.js (v14+)
