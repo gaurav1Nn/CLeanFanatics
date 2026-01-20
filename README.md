@@ -7,7 +7,6 @@
 
 CleanFanatics is a modern, full-stack MERN application designed to streamline the home services booking process. It connects customers with service providers (cleaners, plumbers, electricians) through a seamless, responsive, and professional interface.
 
-![CleanFanatics Dashboard](https://via.placeholder.com/800x400?text=CleanFanatics+Dashboard)
 
 ---
 
@@ -259,16 +258,9 @@ PORT=5000
 NODE_ENV=development
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/cleanfanatics
-# For MongoDB Atlas:
+
 # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/cleanfanatics
 
-# Authentication
-JWT_SECRET=your_super_secret_jwt_key_change_this
-JWT_EXPIRE=7d
-
-# Demo Mode
-DEMO_MODE=true
 
 # CORS
 CORS_ORIGIN=http://localhost:5173
@@ -278,155 +270,6 @@ CORS_ORIGIN=http://localhost:5173
 ```env
 VITE_API_URL=http://localhost:5000/api
 VITE_APP_NAME=CleanFanatics
-```
-
-### MongoDB Setup
-
-#### Option 1: Local MongoDB
-```bash
-# Install MongoDB Community Edition
-# Start MongoDB service
-mongod --dbpath /path/to/data/directory
-```
-
-#### Option 2: MongoDB Atlas (Cloud)
-
-1. Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Get your connection string
-4. Add it to your `.env` file
-
----
-
-## 📚 API Reference
-
-### Base URL
-```
-http://localhost:5000/api
-```
-
-### Authentication
-
-All protected routes require JWT token in header:
-```
-Authorization: Bearer YOUR_JWT_TOKEN
-```
-
-### Endpoints
-
-#### 🔐 Authentication
-
-**Login (Demo Mode)**
-```http
-POST /api/auth/demo-login
-Content-Type: application/json
-
-{
-  "role": "customer" | "provider" | "admin",
-  "name": "John Customer"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "user_id",
-    "name": "John Customer",
-    "role": "customer"
-  }
-}
-```
-
-#### 📋 Bookings
-
-**Get All Bookings**
-```http
-GET /api/bookings
-Authorization: Bearer {token}
-```
-
-**Create Booking**
-```http
-POST /api/bookings
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "serviceType": "cleaning",
-  "scheduledDate": "2024-01-25",
-  "scheduledTime": "10:00",
-  "address": "123 Main St, City, State",
-  "description": "Deep cleaning required",
-  "estimatedPrice": 150
-}
-```
-
-**Update Booking Status**
-```http
-PATCH /api/bookings/:id/status
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "status": "accepted" | "in_progress" | "completed" | "cancelled"
-}
-```
-
-**Cancel Booking**
-```http
-DELETE /api/bookings/:id
-Authorization: Bearer {token}
-```
-
-#### 👥 Provider Routes
-
-**Get Assigned Jobs**
-```http
-GET /api/provider/jobs
-Authorization: Bearer {token}
-```
-
-**Accept Job**
-```http
-POST /api/provider/jobs/:id/accept
-Authorization: Bearer {token}
-```
-
-#### 👨‍💼 Admin Routes
-
-**Get Dashboard Stats**
-```http
-GET /api/admin/stats
-Authorization: Bearer {token}
-```
-
-**Assign Provider to Booking**
-```http
-POST /api/admin/bookings/:id/assign
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "providerId": "provider_id_here"
-}
-```
-
-**Get System Logs**
-```http
-GET /api/admin/logs
-Authorization: Bearer {token}
-```
-
-### Error Response Format
-```json
-{
-  "success": false,
-  "error": "Error message here",
-  "statusCode": 400
-}
 ```
 
 
