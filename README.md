@@ -1,457 +1,164 @@
 # CleanFanatics - Home Services Booking Platform 🧹
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![Node](https://img.shields.io/badge/node-v14+-green.svg)
-![React](https://img.shields.io/badge/react-18-61dafb.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Stack](https://img.shields.io/badge/stack-MERN-blueviolet)
 
-CleanFanatics is a modern, full-stack MERN application designed to streamline the home services booking process. It connects customers with service providers (cleaners, plumbers, electricians) through a seamless, responsive, and professional interface.
-
+CleanFanatics is a robust **Home Services Booking System** built with the **MERN Stack** (MongoDB, Express, React, Node.js). It facilitates seamless connections between customers needing home services (cleaning, plumbing, electrical) and service providers, featuring intelligent provider assignment and real-time status tracking.
 
 ---
 
-## 📋 Table of Contents
+## 🚀 Key Features
 
-- [Features](#-features)
-- [Demo](#-demo)
-- [Tech Stack](#️-tech-stack)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Configuration](#️-configuration)
-- [API Reference](#-api-reference)
-- [Screenshots](#-screenshots)
-- [Roadmap](#️-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
+### 🧠 Intelligent Assignment Engine
+*   **Proximity-Based Matching**: Automatically finds the closest available provider using a smart mock-distance algorithm.
+*   **Skill-Based Routing**: Ensures bookings are only routed to providers with the specific expertise (e.g., 'sofa-cleaning', 'leaking-tap').
+*   **Automated Retry Logic**: System automatically retries assignment if the first provider rejects or is unavailable.
 
----
+### 👥 Role-Based Portals
 
-## ✨ Features
+#### 👤 Customer
+*   **Service Wizard**: Multi-step booking flow to select category, specific service, date, and time.
+*   **Live Tracking**: Real-time status updates: `Pending` → `Assigned` → `Accepted` → `In Progress` → `Completed`.
+*   **History**: View past and upcoming bookings.
 
-### 👤 Customer Portal
+#### 🔧 Provider
+*   **Job Dashboard**: Kanban or list view of assigned jobs.
+*   **Quick Actions**: One-tap "Accept", "Start Job", and "Complete Job" status updates.
+*   **Proximity View**: See distance to customer location (mock data).
 
-- **📊 Dashboard**: Comprehensive view of all bookings with real-time status tracking
-- **🛎️ Service Booking**: Intuitive multi-step booking wizard for:
-  - 🧹 Cleaning Services
-  - 🔧 Plumbing Services
-  - ⚡ Electrical Services
-- **🔄 Real-time Status Updates**: Track your bookings through the complete lifecycle:
-  - ⏳ Pending → 👷 Assigned → ✅ Accepted → 🔨 In Progress → ✔️ Completed
-- **❌ Booking Management**: Cancel bookings before work begins
-- **📱 Responsive Design**: Seamless experience across all devices
-
-### 🔧 Provider Dashboard
-
-- **📋 Job Management**: View and manage assigned jobs in kanban-style or list view
-- **⚡ Quick Actions**: One-click workflow for Accept → Start → Complete
-- **👥 Customer Communication**: Access to customer details and service location
-- **📈 Performance Tracking**: Monitor completed jobs and ratings
-- **🔔 Real-time Notifications**: Instant updates on new job assignments
-
-### 👨‍💼 Admin Dashboard
-
-- **📊 System Overview**: 
-  - Total bookings statistics
-  - Provider performance metrics
-  - Service type distribution
-  - Revenue analytics
-- **⚙️ Operations Management**:
-  - Manual provider assignment
-  - Booking status overrides
-  - Provider availability management
-- **📝 Activity Logs**: Comprehensive event logs for all system activities
-- **👥 User Management**: Manage customers and service providers
+#### 🛡️ Admin
+*   **System Oversight**: View all bookings, users, and system logs.
+*   **Event Logging**: Comprehensive audit trail of all system actions (assignments, cancellations, status changes).
+*   **Manual Override**: Ability to manually assign providers or cancel bookings.
 
 ---
 
-## 🎥 Demo
+## 📂 Project Structure
 
-**Live Demo**: [Coming Soon](#)
+Verified directory structure of the application:
 
-### 🔑 Demo Credentials
-
-The application runs in **Demo Mode** with instant access - no registration required!
-
-| Role | Username | Features |
-|------|----------|----------|
-| 👤 **Customer** | `John Customer` | Book services, track orders, cancel bookings |
-| 🔧 **Provider** | `Mike Cleaner`<br>`Sam Plumber`<br>`Alex Electrician` | Accept jobs, update status, complete services |
-| 👨‍💼 **Admin** | `Admin User` | Full system access, analytics, user management |
+```text
+cleanfanatics/
+├── backend/                 # Node.js + Express API
+│   ├── src/
+│   │   ├── config/          # Database and environment config
+│   │   ├── controllers/     # Request handlers (Auth, Booking, Admin)
+│   │   ├── middleware/      # Auth checks, RBAC, Error handling
+│   │   ├── models/          # Mongoose Schemas (User, Booking, EventLog)
+│   │   ├── routes/          # API Route definitions
+│   │   ├── services/        # Business logic (Assignment, Proximity logic)
+│   │   └── utils/           # Helper functions (Retry logic)
+│   ├── .env.example         # Template for environment variables
+│   └── server.js            # Entry point
+│
+├── frontend/                # React + Vite Client
+│   ├── src/
+│   │   ├── assets/          # Static images and icons
+│   │   ├── components/
+│   │   │   ├── admin/       # Admin-specific components (Logs, Tables)
+│   │   │   ├── common/      # Reusable UI (Buttons, Badges, Loaders)
+│   │   │   ├── layout/      # Navbar, Sidebar, App Layouts
+│   │   │   ├── customer/    # Booking forms and customer views
+│   │   │   └── provider/    # Job cards and provider dashboards
+│   │   ├── context/         # React Context (Auth State)
+│   │   ├── pages/           # Full page views (Login, Dashboard)
+│   │   ├── services/        # Axios API wrapper functions
+│   │   ├── App.jsx          # Main App component with Routing
+│   │   └── main.jsx         # Entry point
+│   ├── public/              # Public static assets
+│   ├── eslint.config.js     # Linter configuration
+│   └── vite.config.js       # Vite configuration
+│
+└── README.md                # Project documentation
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **⚛️ React 18** - Modern UI library with hooks
-- **⚡ Vite** - Next-generation frontend tooling
-- **🎨 Tailwind CSS** - Utility-first CSS framework with custom design system
-- **🧭 React Router** - Client-side routing
-- **📡 Axios** - HTTP client for API calls
+*   **Framework**: React 18
+*   **Build Tool**: Vite
+*   **Styling**: Tailwind CSS (Utility-first)
+*   **State Management**: React Context API
+*   **Routing**: React Router DOM v6
+*   **HTTP Client**: Axios
 
 ### Backend
-- **🟢 Node.js** - JavaScript runtime environment
-- **🚂 Express.js** - Fast, minimalist web framework
-- **🔐 JWT** - Secure authentication
-- **✅ Express Validator** - Request validation middleware
-
-### Database
-- **🍃 MongoDB** - NoSQL database
-- **📦 Mongoose** - Elegant MongoDB object modeling
-
-### Development Tools
-- **🔧 Nodemon** - Auto-restart development server
-- **🎯 ESLint** - Code quality and consistency
-- **🔍 Postman** - API testing (collection included)
+*   **Runtime**: Node.js
+*   **Framework**: Express.js
+*   **Database**: MongoDB (Atlas)
+*   **ODM**: Mongoose
+*   **Authentication**: JWT (JSON Web Tokens)
+*   **Logging**: Custom EventLog model for audit trails
 
 ---
 
 ## 🏁 Getting Started
 
 ### Prerequisites
+*   Node.js (v14 or higher)
+*   MongoDB URI (Local or Atlas)
 
-Before you begin, ensure you have the following installed:
+### 1. Backend Setup
+
 ```bash
-node --version  # v14.0.0 or higher
-npm --version   # v6.0.0 or higher
-```
-
-You'll also need either:
-- MongoDB installed locally, OR
-- MongoDB Atlas account (free tier available)
-
-### Installation
-
-#### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/gaurav1Nn/CleanFanatics.git
-cd CleanFanatics
-```
-
-#### 2️⃣ Backend Setup
-```bash
-# Navigate to backend directory
 cd backend
-
-# Install dependencies
 npm install
 
-# Create environment file
-cp .env.example .env
-```
-
-Edit the `.env` file with your configuration:
-```env
-PORT=5000
-MONGODB_URI=mongo_db url
-
-NODE_ENV=development
-```
-```bash
-# Start the backend server
+# Configure Environment Variables
+# Create a .env file based on .env.example
+# Ensure MONGODB_URI is set
 npm run dev
 ```
 
-The backend will run on `http://localhost:5000`
+The server will start on port `5000` (default).
 
-#### 3️⃣ Frontend Setup
+### 2. Frontend Setup
 
-Open a new terminal window:
 ```bash
-# Navigate to frontend directory
 cd frontend
-
-# Install dependencies
 npm install
 
-# Start the development server
+# Start Development Server
 npm run dev
 ```
 
-The frontend will run on `http://localhost:5173`
-
-
-
-## 📁 Project Structure
-```
-CleanFanatics/
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── customer/
-│   │   │   │   ├── Dashboard.jsx
-│   │   │   │   ├── BookingForm.jsx
-│   │   │   │   └── BookingCard.jsx
-│   │   │   ├── provider/
-│   │   │   │   ├── ProviderDashboard.jsx
-│   │   │   │   └── JobCard.jsx
-│   │   │   ├── admin/
-│   │   │   │   ├── AdminDashboard.jsx
-│   │   │   │   ├── Analytics.jsx
-│   │   │   │   └── UserManagement.jsx
-│   │   │   ├── common/
-│   │   │   │   ├── Navbar.jsx
-│   │   │   │   ├── Footer.jsx
-│   │   │   │   └── LoadingSpinner.jsx
-│   │   │   └── auth/
-│   │   │       └── Login.jsx
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Services.jsx
-│   │   │   └── Contact.jsx
-│   │   ├── utils/
-│   │   │   ├── api.js
-│   │   │   └── helpers.js
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── public/
-│   ├── index.html
-│   ├── tailwind.config.js
-│   ├── vite.config.js
-│   └── package.json
-│
-├── backend/
-│   ├── src/
-│   │   ├── models/
-│   │   │   ├── User.js
-│   │   │   ├── Booking.js
-│   │   │   └── Service.js
-│   │   ├── routes/
-│   │   │   ├── auth.js
-│   │   │   ├── bookings.js
-│   │   │   ├── users.js
-│   │   │   └── admin.js
-│   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   ├── bookingController.js
-│   │   │   └── adminController.js
-│   │   ├── middleware/
-│   │   │   ├── auth.js
-│   │   │   └── errorHandler.js
-│   │   ├── config/
-│   │   │   └── database.js
-│   │   └── server.js
-│   ├── .env.example
-│   └── package.json
-│
-├── docs/
-│   ├── API.md
-│   └── SETUP.md
-├── .gitignore
-├── LICENSE
-└── README.md
-```
+The application will run on `http://localhost:5173`.
 
 ---
 
-## ⚙️ Configuration
+## 🧪 Demo Credentials
 
-### Environment Variables
+The application runs in **Demo Mode** with pre-configured users for testing:
 
-#### Backend (.env)
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
+| Role | Email / User | Password | Capability |
+|------|--------------|----------|------------|
+| **Customer** | `customer@demo.com` | `password123` | Book services, track status |
+| **Provider** | `provider@demo.com` | `password123` | Accept jobs, update status |
+| **Admin** | `admin@demo.com` | `admin123` | View logs, manage users |
 
-# Database
-
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/cleanfanatics
-
-
-# CORS
-CORS_ORIGIN=http://localhost:5173
-```
-
-#### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:5000/api
-VITE_APP_NAME=CleanFanatics
-```
-
-
-
-
-
-## 🎨 Design System
-
-### Color Palette
-```css
-/* Primary Colors */
---primary-blue: #3B82F6
---primary-indigo: #6366F1
-
-/* Neutrals */
---gray-50: #F9FAFB
---gray-100: #F3F4F6
---gray-200: #E5E7EB
---gray-700: #374151
---gray-900: #111827
-
-/* Status Colors */
---success: #10B981
---warning: #F59E0B
---error: #EF4444
---info: #3B82F6
-```
-
-### Typography
-
-- **Font Family**: Inter, system-ui, sans-serif
-- **Headings**: Bold, 600-700 weight
-- **Body**: Regular, 400 weight
-- **Small Text**: 14px, 500 weight
+> **Note**: The exact demo logic is handled in `auth.controller.js` using the `DEMO_USERS` object.
 
 ---
 
-## 🗺️ Roadmap
+## 📝 API Overview
 
-### ✅ Version 1.0.0 (Current)
-- [x] Customer booking system
-- [x] Provider job management
-- [x] Admin dashboard with analytics
-- [x] Real-time status tracking
-- [x] Demo mode authentication
-- [x] Responsive design
-
-### 🚧 Version 1.1.0 (In Progress)
-- [ ] Email notifications
-- [ ] SMS alerts for job updates
-- [ ] Payment gateway integration (Stripe/Razorpay)
-- [ ] Customer reviews and ratings
-- [ ] Provider availability calendar
-
-### 🔮 Version 2.0.0 (Planned)
-- [ ] Real-time chat between customer and provider
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics and reporting
-- [ ] Multi-language support
-- [ ] Service history and recommendations
-- [ ] Loyalty rewards program
-
-### 💡 Future Enhancements
-- [ ] AI-powered service recommendations
-- [ ] Automated provider matching
-- [ ] Video consultation feature
-- [ ] IoT device integration
-- [ ] Subscription-based services
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | User authentication |
+| POST | `/api/bookings` | Create a new booking |
+| GET | `/api/bookings/my-bookings` | Get customer/provider specific bookings |
+| PATCH | `/api/bookings/:id/status` | Update booking status (Provider/Admin) |
+| GET | `/api/admin/logs` | Retrieve system event logs |
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch**
-```bash
-   git checkout -b feature/AmazingFeature
-```
-3. **Commit your changes**
-```bash
-   git commit -m 'Add some AmazingFeature'
-```
-4. **Push to the branch**
-```bash
-   git push origin feature/AmazingFeature
-```
-5. **Open a Pull Request**
-
-### Coding Guidelines
-
-- Follow the existing code style
-- Write meaningful commit messages
-- Add comments for complex logic
-- Update documentation as needed
-- Test your changes thoroughly
-
----
-
-## 🐛 Known Issues
-
-- [ ] Booking calendar may show incorrect timezone in some cases
-- [ ] Provider dashboard refresh needed after status update
-- [ ] Mobile view: Long addresses may overflow on small screens
-
-See [Issues](https://github.com/gaurav1Nn/CleanFanatics/issues) for a complete list.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
-MIT License
-
-Copyright (c) 2024 Gaurav
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
----
-
-## 👤 Contact
-
-**Gaurav**
-
-- GitHub: [@gaurav1Nn](https://github.com/gaurav1Nn)
-- Email: your.email@example.com
-- LinkedIn: [Your Profile](https://linkedin.com/in/yourprofile)
-
-**Project Link**: [https://github.com/gaurav1Nn/CleanFanatics](https://github.com/gaurav1Nn/CleanFanatics)
-
----
-
-## 🙏 Acknowledgments
-
-- [React Documentation](https://react.dev)
-- [Tailwind CSS](https://tailwindcss.com)
-- [MongoDB Documentation](https://docs.mongodb.com)
-- [Express.js](https://expressjs.com)
-- [Vite](https://vitejs.dev)
-- Icons by [Heroicons](https://heroicons.com)
-- Inspiration from modern SaaS platforms
-
----
-
-## 📊 Project Stats
-
-![GitHub stars](https://img.shields.io/github/stars/gaurav1Nn/CleanFanatics?style=social)
-![GitHub forks](https://img.shields.io/github/forks/gaurav1Nn/CleanFanatics?style=social)
-![GitHub issues](https://img.shields.io/github/issues/gaurav1Nn/CleanFanatics)
-![GitHub last commit](https://img.shields.io/github/last-commit/gaurav1Nn/CleanFanatics)
-
----
-
-<p align="center">
-  <b>Made with ❤️ by Gaurav</b>
-</p>
-
-<p align="center">
-  ⭐ Star this repo if you find it helpful!
-</p>
-
-<p align="center">
-  <a href="#cleanfanatics---home-services-booking-platform-">Back to Top ⬆️</a>
-</p>
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/NewFeature`)
+3. Commit your Changes (`git commit -m 'Add some NewFeature'`)
+4. Push to the Branch (`git push origin feature/NewFeature`)
+5. Open a Pull Request
