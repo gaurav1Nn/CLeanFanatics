@@ -10,6 +10,20 @@ const DEMO_USERS = {
     role: 'customer',
     phone: '9876543210'
   },
+  customer2: {
+    _id: 'customer2',
+    name: 'Sarah Johnson',
+    email: 'sarah@example.com',
+    role: 'customer',
+    phone: '9876543221'
+  },
+  customer3: {
+    _id: 'customer3',
+    name: 'Michael Brown',
+    email: 'michael@example.com',
+    role: 'customer',
+    phone: '9876543222'
+  },
   // CLEANERS - Multiple providers with different distances
   provider1: {
     _id: 'provider1',
@@ -83,6 +97,26 @@ const DEMO_USERS = {
     isAvailable: true,
     mockDistance: 4.5 // km - Second closest electrician
   },
+  provider8: {
+    _id: 'provider8',
+    name: 'Lisa Fix',
+    email: 'lisa@example.com',
+    role: 'provider',
+    phone: '9876543218',
+    serviceCategories: ['leaking-tap', 'pipe-repair', 'bathroom-fitting'],
+    isAvailable: true,
+    mockDistance: 2.3 // km - Second closest plumber
+  },
+  provider9: {
+    _id: 'provider9',
+    name: 'Ryan Handy',
+    email: 'ryan@example.com',
+    role: 'provider',
+    phone: '9876543219',
+    serviceCategories: ['floor-cleaning', 'leaking-tap', 'switch-installation'],
+    isAvailable: true,
+    mockDistance: 3.5 // km - Multi-skilled handyman
+  },
   admin1: {
     _id: 'admin1',
     name: 'Admin User',
@@ -97,7 +131,7 @@ const login = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId || !DEMO_USERS[userId]) {
-    throw new ApiError(400, 'Invalid user ID. Use: customer1, provider1-7, or admin1');
+    throw new ApiError(400, 'Invalid user ID. Use: customer1-3, provider1-9, or admin1');
   }
 
   const user = DEMO_USERS[userId];
