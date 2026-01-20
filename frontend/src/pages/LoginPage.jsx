@@ -1,215 +1,161 @@
-// import { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../context/AuthContext';
-// import { authAPI } from '../services/api';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { authAPI } from '../services/api';
 
-// const LoginPage = () => {
-//     const [users, setUsers] = useState([]);
-//     const [selectedUser, setSelectedUser] = useState('');
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState('');
-//     const { login, isAuthenticated, user } = useAuth();
-//     const navigate = useNavigate();
+const LoginPage = () => {
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const { login, isAuthenticated, user } = useAuth();
+    const navigate = useNavigate();
 
-//     useEffect(() => {
-//         if (isAuthenticated) {
-//             redirectBasedOnRole(user.role);
-//         }
-//         fetchUsers();
-//     }, [isAuthenticated]);
+    useEffect(() => {
+        if (isAuthenticated) {
+            redirectBasedOnRole(user.role);
+        }
+        fetchUsers();
+    }, [isAuthenticated]);
 
-//     const fetchUsers = async () => {
-//         try {
-//             const response = await authAPI.getDemoUsers();
-//             setUsers(response.data.data);
-//         } catch (err) {
-//             console.error('Failed to fetch users:', err);
-//         }
-//     };
+    const fetchUsers = async () => {
+        try {
+            const response = await authAPI.getDemoUsers();
+            setUsers(response.data.data);
+        } catch (err) {
+            console.error('Failed to fetch users:', err);
+        }
+    };
 
-//     const redirectBasedOnRole = (role) => {
-//         switch (role) {
-//             case 'customer': navigate('/bookings'); break;
-//             case 'provider': navigate('/provider'); break;
-//             case 'admin': navigate('/admin'); break;
-//             default: navigate('/');
-//         }
-//     };
+    const redirectBasedOnRole = (role) => {
+        switch (role) {
+            case 'customer': navigate('/bookings'); break;
+            case 'provider': navigate('/provider'); break;
+            case 'admin': navigate('/admin'); break;
+            default: navigate('/');
+        }
+    };
 
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         if (!selectedUser) {
-//             setError('Please select a user');
-//             return;
-//         }
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if (!selectedUser) {
+            setError('Please select a user');
+            return;
+        }
 
-//         setLoading(true);
-//         setError('');
+        setLoading(true);
+        setError('');
 
-//         const result = await login(selectedUser);
+        const result = await login(selectedUser);
 
-//         if (result.success) {
-//             const selectedUserData = users.find(u => u._id === selectedUser);
-//             redirectBasedOnRole(selectedUserData.role);
-//         } else {
-//             setError(result.error);
-//         }
+        if (result.success) {
+            const selectedUserData = users.find(u => u._id === selectedUser);
+            redirectBasedOnRole(selectedUserData.role);
+        } else {
+            setError(result.error);
+        }
 
-//         setLoading(false);
-//     };
+        setLoading(false);
+    };
 
-//     const groupedUsers = {
-//         customer: users.filter(u => u.role === 'customer'),
-//         provider: users.filter(u => u.role === 'provider'),
-//         admin: users.filter(u => u.role === 'admin')
-//     };
+    const groupedUsers = {
+        customer: users.filter(u => u.role === 'customer'),
+        provider: users.filter(u => u.role === 'provider'),
+        admin: users.filter(u => u.role === 'admin')
+    };
 
-//     return (
-//         <div className="min-h-screen flex items-center justify-center px-6 py-12">
-//             {/* Background decorations */}
-//             <div
-//                 className="fixed top-20 left-20 w-72 h-72 rounded-full opacity-20 pointer-events-none"
-//                 style={{
-//                     background: 'radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, transparent 70%)',
-//                     filter: 'blur(60px)'
-//                 }}
-//             />
-//             <div
-//                 className="fixed bottom-20 right-20 w-96 h-96 rounded-full opacity-15 pointer-events-none"
-//                 style={{
-//                     background: 'radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 70%)',
-//                     filter: 'blur(80px)'
-//                 }}
-//             />
+    const selectedUserData = users.find(u => u._id === selectedUser);
 
-//             <div
-//                 className="p-8 lg:p-10 w-full max-w-md rounded-2xl relative z-10 animate-fade-in"
-//                 style={{
-//                     background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.85) 100%)',
-//                     border: '1px solid rgba(255, 255, 255, 0.08)',
-//                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-//                 }}
-//             >
-//                 {/* Logo & Title */}
-//                 <div className="text-center mb-10">
-//                     <span
-//                         className="text-6xl lg:text-7xl mb-5 block"
-//                         style={{
-//                             animation: 'float 3s ease-in-out infinite',
-//                             filter: 'drop-shadow(0 8px 20px rgba(99, 102, 241, 0.4))'
-//                         }}
-//                     >
-//                         🧹
-//                     </span>
-//                     <h1
-//                         className="text-3xl lg:text-4xl font-bold mb-2"
-//                         style={{
-//                             background: 'linear-gradient(135deg, #818cf8 0%, #6366f1 40%, #a78bfa 100%)',
-//                             WebkitBackgroundClip: 'text',
-//                             WebkitTextFillColor: 'transparent',
-//                             backgroundClip: 'text'
-//                         }}
-//                     >
-//                         CleanFanatics
-//                     </h1>
-//                     <p className="text-gray-400 text-base lg:text-lg">Home Services Booking Platform</p>
-//                 </div>
+    return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+                {/* Header */}
+                <div className="text-center mb-8">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-blue-50 rounded-full">
+                            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
+                    <p className="text-gray-500 text-sm mt-2">Sign in to CleanFanatics</p>
+                </div>
 
-//                 <form onSubmit={handleLogin} className="space-y-6">
-//                     <div>
-//                         <label className="block text-sm font-semibold text-gray-300 mb-3">
-//                             Select Demo User
-//                         </label>
-//                         <select
-//                             value={selectedUser}
-//                             onChange={(e) => setSelectedUser(e.target.value)}
-//                             className="select-field"
-//                         >
-//                             <option value="">Choose a user...</option>
+                <form onSubmit={handleLogin} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Select Demo User
+                        </label>
+                        <div className="relative">
+                            <select
+                                value={selectedUser}
+                                onChange={(e) => {
+                                    setSelectedUser(e.target.value);
+                                    setError('');
+                                }}
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
+                            >
+                                <option value="">Choose a user...</option>
+                                <optgroup label="Customers">
+                                    {groupedUsers.customer.map(u => (
+                                        <option key={u._id} value={u._id}>{u.name}</option>
+                                    ))}
+                                </optgroup>
+                                <optgroup label="Providers">
+                                    {groupedUsers.provider.map(u => (
+                                        <option key={u._id} value={u._id}>
+                                            {u.name} • {u.serviceCategories?.join(', ')}
+                                        </option>
+                                    ))}
+                                </optgroup>
+                                <optgroup label="Admins">
+                                    {groupedUsers.admin.map(u => (
+                                        <option key={u._id} value={u._id}>{u.name}</option>
+                                    ))}
+                                </optgroup>
+                            </select>
+                            <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
+                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
 
-//                             <optgroup label="👤 Customers">
-//                                 {groupedUsers.customer.map(user => (
-//                                     <option key={user._id} value={user._id}>
-//                                         {user.name} ({user.email})
-//                                     </option>
-//                                 ))}
-//                             </optgroup>
+                    {selectedUserData && (
+                        <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
+                                {selectedUserData.name.charAt(0)}
+                            </div>
+                            <div>
+                                <p className="font-medium text-gray-900">{selectedUserData.name}</p>
+                                <p className="text-xs text-gray-500 capitalize">{selectedUserData.role}</p>
+                            </div>
+                        </div>
+                    )}
 
-//                             <optgroup label="🔧 Providers">
-//                                 {groupedUsers.provider.map(user => (
-//                                     <option key={user._id} value={user._id}>
-//                                         {user.name} - {user.serviceCategories?.join(', ')}
-//                                     </option>
-//                                 ))}
-//                             </optgroup>
+                    {error && (
+                        <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 text-center">
+                            {error}
+                        </div>
+                    )}
 
-//                             <optgroup label="👨‍💼 Admins">
-//                                 {groupedUsers.admin.map(user => (
-//                                     <option key={user._id} value={user._id}>
-//                                         {user.name} ({user.email})
-//                                     </option>
-//                                 ))}
-//                             </optgroup>
-//                         </select>
-//                     </div>
+                    <button
+                        type="submit"
+                        disabled={loading || !selectedUser}
+                        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {loading ? 'Signing in...' : 'Sign In'}
+                    </button>
+                </form>
 
-//                     {error && (
-//                         <div
-//                             className="p-4 rounded-xl text-sm"
-//                             style={{
-//                                 background: 'rgba(239, 68, 68, 0.1)',
-//                                 border: '1px solid rgba(239, 68, 68, 0.2)',
-//                                 color: '#f87171'
-//                             }}
-//                         >
-//                             {error}
-//                         </div>
-//                     )}
+                <div className="mt-8 text-center text-xs text-gray-400">
+                    <p>Demo Mode • No password required</p>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-//                     <button
-//                         type="submit"
-//                         disabled={loading || !selectedUser}
-//                         className="btn-primary w-full flex items-center justify-center gap-3 py-4 text-base"
-//                     >
-//                         {loading ? (
-//                             <>⏳ Logging in...</>
-//                         ) : (
-//                             <>🚀 Login</>
-//                         )}
-//                     </button>
-//                 </form>
-
-//                 {/* Demo Mode Info */}
-//                 <div
-//                     className="mt-8 p-5 rounded-xl"
-//                     style={{
-//                         background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%)',
-//                         border: '1px solid rgba(99, 102, 241, 0.12)'
-//                     }}
-//                 >
-//                     <div className="flex items-center gap-2 mb-3">
-//                         <span className="text-lg">💡</span>
-//                         <h3 className="text-sm font-semibold text-indigo-300">Demo Mode</h3>
-//                     </div>
-//                     <p className="text-sm text-gray-400 leading-relaxed">
-//                         This is a demo application. Select any user above to explore different roles:
-//                         <span className="text-green-400 font-medium"> Customer</span>,
-//                         <span className="text-blue-400 font-medium"> Provider</span>, or
-//                         <span className="text-red-400 font-medium"> Admin</span>.
-//                     </p>
-//                 </div>
-//             </div>
-
-//             <style>{`
-//                 @keyframes float {
-//                     0%, 100% { transform: translateY(0); }
-//                     50% { transform: translateY(-12px); }
-//                 }
-//             `}</style>
-//         </div>
-//     );
-// };
-
-// export default LoginPage;
-
-
+export default LoginPage;

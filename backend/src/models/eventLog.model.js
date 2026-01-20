@@ -11,8 +11,7 @@ const eventLogSchema = new mongoose.Schema({
         required: true
     },
     performedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     },
     performedByRole: {
         type: String,

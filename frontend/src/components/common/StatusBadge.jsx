@@ -1,25 +1,24 @@
 const StatusBadge = ({ status }) => {
-    const statusConfig = {
-        pending: { label: 'Pending', class: 'status-pending', icon: '⏳' },
-        assigned: { label: 'Assigned', class: 'status-assigned', icon: '👤' },
-        accepted: { label: 'Accepted', class: 'status-accepted', icon: '✅' },
-        'in-progress': { label: 'In Progress', class: 'status-in-progress', icon: '🔧' },
-        completed: { label: 'Completed', class: 'status-completed', icon: '🎉' },
-        cancelled: { label: 'Cancelled', class: 'status-cancelled', icon: '❌' }
+    const getStatusClass = (status) => {
+        const classes = {
+            pending: 'status-pending',
+            assigned: 'status-assigned',
+            accepted: 'status-accepted',
+            'in-progress': 'status-in-progress',
+            completed: 'status-completed',
+            cancelled: 'status-cancelled'
+        };
+        return classes[status] || 'bg-gray-100 text-gray-800';
     };
 
-    const config = statusConfig[status] || { label: status, class: '', icon: '❓' };
+    const getLabel = (status) => {
+        return status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    };
 
     return (
-        <span
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white ${config.class}`}
-            style={{
-                textShadow: '0 1px 2px rgba(0,0,0,0.2)',
-                letterSpacing: '0.025em'
-            }}
-        >
-            <span className="text-base">{config.icon}</span>
-            <span>{config.label}</span>
+        <span className={`status-badge ${getStatusClass(status)}`}>
+            <span className="w-1.5 h-1.5 rounded-full bg-current opacity-75"></span>
+            {getLabel(status)}
         </span>
     );
 };

@@ -10,21 +10,18 @@ const statusHistorySchema = new mongoose.Schema({
         default: Date.now
     },
     changedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     },
     note: String
 }, { _id: false });
 
 const bookingSchema = new mongoose.Schema({
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: [true, 'Customer is required']
     },
     provider: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         default: null
     },
     serviceType: {

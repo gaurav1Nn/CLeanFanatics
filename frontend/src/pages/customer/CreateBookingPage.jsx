@@ -1,222 +1,173 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bookingAPI } from '../../services/api';
-import ServiceIcon from '../../components/common/ServiceIcon';
 
 const CreateBookingPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
     const [formData, setFormData] = useState({
-        serviceType: '',
+        serviceType: 'cleaning',
         scheduledDate: '',
         scheduledTime: '',
         address: '',
         description: ''
     });
 
-    const serviceTypes = [
-        { value: 'cleaning', label: 'House Cleaning', icon: '🧹', description: 'Professional home cleaning services' },
-        { value: 'plumbing', label: 'Plumbing', icon: '🔧', description: 'Fix leaks, pipes, and drainage' },
-        { value: 'electrical', label: 'Electrical', icon: '⚡', description: 'Wiring, fixtures, and repairs' }
+    const services = [
+        {
+            id: 'cleaning',
+            name: 'Home Cleaning',
+            icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+            ),
+            desc: 'Regular home cleaning service'
+        },
+        {
+            id: 'plumbing',
+            name: 'Plumbing',
+            icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+            ),
+            desc: 'Pipe repairs and installation'
+        },
+        {
+            id: 'electrical',
+            name: 'Electrical',
+            icon: (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            ),
+            desc: 'Wiring and appliance repair'
+        }
     ];
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
-        setSuccess('');
-
         try {
             await bookingAPI.create(formData);
-            setSuccess('Booking created successfully!');
-            setTimeout(() => navigate('/bookings'), 2000);
+            navigate('/bookings');
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create booking');
+            alert(err.response?.data?.message || 'Failed to create booking');
         } finally {
             setLoading(false);
         }
     };
 
-    const today = new Date().toISOString().split('T')[0];
-
     return (
-        <div className="max-w-2xl mx-auto">
-            <div
-                className="p-6 lg:p-10 rounded-2xl"
-                style={{
-                    background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.7) 100%)',
-                    border: '1px solid rgba(255, 255, 255, 0.06)'
-                }}
-            >
-                {/* Header */}
-                <div className="mb-8 lg:mb-10">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
-                        Create New Booking
-                    </h1>
-                    <p className="text-gray-400">Fill in the details below to request a service</p>
-                </div>
+        <div className="max-w-2xl mx-auto py-8">
+            <div className="mb-8">
+                <h1 className="text-2xl font-bold text-gray-900">Book a Service</h1>
+                <p className="text-gray-500 mt-1">Fill in the details to schedule your appointment.</p>
+            </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* Service Type Selection */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-4">
-                            Select Service Type
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {serviceTypes.map((service) => (
-                                <button
-                                    type="button"
-                                    key={service.value}
-                                    onClick={() => setFormData(prev => ({ ...prev, serviceType: service.value }))}
-                                    className={`p-5 rounded-2xl border-2 transition-all duration-300 text-center ${formData.serviceType === service.value
-                                            ? 'border-indigo-500'
-                                            : 'border-transparent hover:border-white/10'
-                                        }`}
-                                    style={formData.serviceType === service.value ? {
-                                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.15) 100%)',
-                                        boxShadow: '0 8px 25px rgba(99, 102, 241, 0.2)'
-                                    } : {
-                                        background: 'rgba(255, 255, 255, 0.03)'
-                                    }}
-                                >
-                                    <div className="flex justify-center mb-3">
-                                        <ServiceIcon type={service.value} size="md" />
-                                    </div>
-                                    <p className="font-semibold text-white mb-1">{service.label}</p>
-                                    <p className="text-xs text-gray-400 leading-relaxed">{service.description}</p>
-                                </button>
-                            ))}
-                        </div>
+            <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+
+                {/* Service Type */}
+                <section>
+                    <label className="block text-sm font-semibold text-gray-900 mb-4">Select Service Type</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {services.map((service) => (
+                            <button
+                                key={service.id}
+                                type="button"
+                                onClick={() => setFormData({ ...formData, serviceType: service.id })}
+                                className={`
+                                    relative p-4 rounded-xl border-2 text-left transition-all
+                                    ${formData.serviceType === service.id
+                                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600'
+                                    }
+                                `}
+                            >
+                                <div className={`mb-3 ${formData.serviceType === service.id ? 'text-blue-600' : 'text-gray-400'}`}>
+                                    {service.icon}
+                                </div>
+                                <h3 className="font-semibold text-sm">{service.name}</h3>
+                                <p className="text-xs mt-1 opacity-75">{service.desc}</p>
+                            </button>
+                        ))}
                     </div>
+                </section>
 
-                    {/* Date and Time */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <hr className="border-gray-100" />
+
+                {/* Date & Time */}
+                <section>
+                    <h2 className="text-sm font-semibold text-gray-900 mb-4">Date & Time</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-300 mb-3">
-                                📅 Preferred Date
-                            </label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
                             <input
                                 type="date"
-                                name="scheduledDate"
-                                value={formData.scheduledDate}
-                                onChange={handleChange}
-                                min={today}
                                 required
+                                min={new Date().toISOString().split('T')[0]}
+                                value={formData.scheduledDate}
+                                onChange={(e) => setFormData({ ...formData, scheduledDate: e.target.value })}
                                 className="input-field"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-300 mb-3">
-                                🕐 Preferred Time
-                            </label>
-                            <select
-                                name="scheduledTime"
-                                value={formData.scheduledTime}
-                                onChange={handleChange}
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            <input
+                                type="time"
                                 required
-                                className="select-field"
-                            >
-                                <option value="">Select time...</option>
-                                <option value="09:00 AM">09:00 AM</option>
-                                <option value="10:00 AM">10:00 AM</option>
-                                <option value="11:00 AM">11:00 AM</option>
-                                <option value="12:00 PM">12:00 PM</option>
-                                <option value="02:00 PM">02:00 PM</option>
-                                <option value="03:00 PM">03:00 PM</option>
-                                <option value="04:00 PM">04:00 PM</option>
-                                <option value="05:00 PM">05:00 PM</option>
-                            </select>
+                                value={formData.scheduledTime}
+                                onChange={(e) => setFormData({ ...formData, scheduledTime: e.target.value })}
+                                className="input-field"
+                            />
                         </div>
                     </div>
+                </section>
 
-                    {/* Address */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-3">
-                            📍 Service Address
-                        </label>
-                        <input
-                            type="text"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="Enter your full address"
-                            required
-                            className="input-field"
-                        />
-                    </div>
+                <hr className="border-gray-100" />
 
-                    {/* Description */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-300 mb-3">
-                            💬 Description (Optional)
-                        </label>
-                        <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                            placeholder="Describe the issue or any special requirements..."
-                            rows={4}
-                            className="input-field resize-none"
-                        />
-                    </div>
-
-                    {/* Messages */}
-                    {error && (
-                        <div
-                            className="p-4 rounded-xl text-sm flex items-center gap-2"
-                            style={{
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                border: '1px solid rgba(239, 68, 68, 0.2)',
-                                color: '#f87171'
-                            }}
-                        >
-                            <span>❌</span> {error}
+                {/* Location */}
+                <section>
+                    <h2 className="text-sm font-semibold text-gray-900 mb-4">Location Details</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Address</label>
+                            <textarea
+                                required
+                                rows="3"
+                                placeholder="Street address, City, State..."
+                                value={formData.address}
+                                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                className="input-field resize-none"
+                            />
                         </div>
-                    )}
-
-                    {success && (
-                        <div
-                            className="p-4 rounded-xl text-sm flex items-center gap-2"
-                            style={{
-                                background: 'rgba(16, 185, 129, 0.1)',
-                                border: '1px solid rgba(16, 185, 129, 0.2)',
-                                color: '#34d399'
-                            }}
-                        >
-                            <span>✅</span> {success}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
+                            <textarea
+                                rows="2"
+                                placeholder="Any specific instructions..."
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                className="input-field resize-none"
+                            />
                         </div>
-                    )}
-
-                    {/* Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                        <button
-                            type="button"
-                            onClick={() => navigate('/bookings')}
-                            className="btn-secondary flex-1"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={loading || !formData.serviceType}
-                            className="btn-primary flex-1 flex items-center justify-center gap-2"
-                        >
-                            {loading ? (
-                                <>⏳ Creating...</>
-                            ) : (
-                                <>📅 Create Booking</>
-                            )}
-                        </button>
                     </div>
-                </form>
-            </div>
+                </section>
+
+                <div className="pt-4">
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="btn-primary w-full py-3"
+                    >
+                        {loading ? 'Confirming...' : 'Confirm Booking'}
+                    </button>
+                    <p className="text-center text-xs text-gray-400 mt-4">
+                        You can cancel or reschedule later from your bookings page.
+                    </p>
+                </div>
+            </form>
         </div>
     );
 };
