@@ -1,18 +1,25 @@
-const { User, Booking, EventLog } = require('../models');
+const { Booking, EventLog } = require('../models');
+const { DEMO_USERS } = require('../controllers/auth.controller');
+
+/**
+ * Get available providers from demo users based on service type
+ */
+const getAvailableProviders = (serviceType, excludeProviders = []) => {
+    return Object.values(DEMO_USERS).filter(user =>
+        user.role === 'provider' &&
+        user.isAvailable &&
+        user.serviceCategories?.includes(serviceType) &&
+        !excludeProviders.includes(user._id)
+    );
+};
 
 /**
  * Auto-assign a provider to a booking based on service type
  * Uses first-available strategy with retry tracking
  */
 const autoAssignProvider = async (booking) => {
-    // Find available provider matching service type
-    const provider = await User.findOne({
-        role: 'provider',
-        isAvailable: true,
-        serviceCategories: booking.serviceType
-    }).sort({ createdAt: 1 }); // First available (oldest account)
-
-    return provider;
+    const providers = getAvailableProviders(booking.serviceType);
+    return providers.length > 0 ? providers[0] : null;
 };
 
 /**
@@ -53,25 +60,18 @@ const attemptAssignment = async (bookingId, excludeProviders = []) => {
         return { success: false, reason: 'max_attempts_reached' };
     }
 
-    // Find available provider (excluding rejected ones)
-    const query = {
-        role: 'provider',
-        isAvailable: true,
-        serviceCategories: booking.serviceType
-    };
+    // Find available provider from demo users (excluding rejected ones)
+    const availableProviders = getAvailableProviders(booking.serviceType, excludeProviders);
 
-    if (excludeProviders.length > 0) {
-        query._id = { $nin: excludeProviders };
-    }
-
-    const provider = await User.findOne(query).sort({ createdAt: 1 });
-
-    if (!provider) {
+    if (availableProviders.length === 0) {
         booking.assignmentAttempts += 1;
         await booking.save();
 
         return { success: false, reason: 'no_available_providers' };
     }
+
+    // Select first available provider
+    const provider = availableProviders[0];
 
     // Assign provider
     booking.provider = provider._id;
@@ -130,12 +130,13 @@ const handleProviderRejection = async (bookingId, providerId, reason) => {
         details: { reason }
     });
 
-    // Attempt to reassign
+    // Attempt to reassign (excluding the rejecting provider)
     return await attemptAssignment(bookingId, [providerId]);
 };
 
 module.exports = {
     autoAssignProvider,
     attemptAssignment,
-    handleProviderRejection
+    handleProviderRejection,
+    getAvailableProviders
 };
